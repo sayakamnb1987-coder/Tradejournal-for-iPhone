@@ -66,6 +66,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
 .htf-bg { flex: 1; height: 4px; background: var(--bg3); border-radius: 2px; }
 .htf-bar { height: 4px; border-radius: 2px; }
 .htf-n { font-size: 11px; color: var(--text3); flex-shrink: 0; font-family: var(--mono); }
+.htf-tf-sel { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 4px 6px; border-radius: 6px; margin-bottom: 5px; outline: none; cursor: pointer; }
 
 /* AI panel */
 .ai-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
@@ -348,7 +349,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
       <div class="form-section-title">上位足の方向</div>
       <div class="form-grid-3">
         <div class="field">
-          <label>4H 方向</label>
+          <select class="htf-tf-sel" id="htf-sel-4h" onchange="setHTFTF('htf4h',this.value)"><option>5M</option><option>15M</option><option>30M</option><option>1H</option><option>2H</option><option>4H</option><option>日足</option><option>週足</option><option>月足</option></select>
           <div class="htf-toggle">
             <button class="htf-btn up"   onclick="setHTF('htf4h','UP')">↑</button>
             <button class="htf-btn flat" onclick="setHTF('htf4h','FLAT')">→</button>
@@ -356,7 +357,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
           </div>
         </div>
         <div class="field">
-          <label>日足 方向</label>
+          <select class="htf-tf-sel" id="htf-sel-d1" onchange="setHTFTF('htfD1',this.value)"><option>5M</option><option>15M</option><option>30M</option><option>1H</option><option>2H</option><option>4H</option><option>日足</option><option>週足</option><option>月足</option></select>
           <div class="htf-toggle">
             <button class="htf-btn up"   onclick="setHTF('htfD1','UP')">↑</button>
             <button class="htf-btn flat" onclick="setHTF('htfD1','FLAT')">→</button>
@@ -364,7 +365,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
           </div>
         </div>
         <div class="field">
-          <label>週足 方向</label>
+          <select class="htf-tf-sel" id="htf-sel-w1" onchange="setHTFTF('htfW1',this.value)"><option>5M</option><option>15M</option><option>30M</option><option>1H</option><option>2H</option><option>4H</option><option>日足</option><option>週足</option><option>月足</option></select>
           <div class="htf-toggle">
             <button class="htf-btn up"   onclick="setHTF('htfW1','UP')">↑</button>
             <button class="htf-btn flat" onclick="setHTF('htfW1','FLAT')">→</button>
@@ -458,6 +459,9 @@ let pendingImgs = [], pendingImgCaps = [];
 let currentEditId = null;
 let fibEntry = null, fibExit = null;
 let htfVals = { htf4h: null, htfD1: null, htfW1: null };
+let htfTFs = { htf4h: '4H', htfD1: '日足', htfW1: '週足' };
+function gHTFTFs() { try { return JSON.parse(localStorage.getItem('tj_htf_tfs')) || { htf4h:'4H', htfD1:'日足', htfW1:'週足' }; } catch { return { htf4h:'4H', htfD1:'日足', htfW1:'週足' }; } }
+function setHTFTF(key, val) { htfTFs[key] = val; localStorage.setItem('tj_htf_tfs', JSON.stringify(htfTFs)); }
 
 // ── SYMBOLS ─────────────────────────────────────────────
 function gSyms() { try { return JSON.parse(localStorage.getItem('tj_syms')||'null') || ['USD/JPY','EUR/JPY','GBP/JPY','EUR/USD','GBP/USD','AUD/USD','XAU/USD']; } catch { return ['USD/JPY','EUR/JPY','GBP/JPY']; } }
@@ -905,9 +909,9 @@ function renderFib() {
 
 function renderHTFStats() {
   const fields = [
-    { key: 'htf4h', label: '4H' },
-    { key: 'htfD1', label: '日足' },
-    { key: 'htfW1', label: '週足' },
+    { key: 'htf4h', label: htfTFs.htf4h },
+    { key: 'htfD1', label: htfTFs.htfD1 },
+    { key: 'htfW1', label: htfTFs.htfW1 },
   ];
   const dirs = { UP: '↑', FLAT: '→', DOWN: '↓' };
   let rows = '';
@@ -1000,6 +1004,7 @@ function render() {
 // ── INIT ─────────────────────────────────────────────────
 load();
 loadThemePref();
+htfTFs = gHTFTFs(); ['htf4h','htfD1','htfW1'].forEach((k,i) => { const s = document.getElementById(['htf-sel-4h','htf-sel-d1','htf-sel-w1'][i]); if(s) s.value = htfTFs[k]; });
 renderSymSel();
 render();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
