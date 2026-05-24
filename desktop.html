@@ -264,6 +264,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
     </div>
     <div class="modal-section">
       <div class="modal-section-label">📦 データバックアップ</div>
+      <div style="font-size:12px;color:var(--amber);background:var(--amber-bg);border-radius:7px;padding:9px 11px;margin-bottom:10px;line-height:1.6">⚠️ データはブラウザのlocalStorageに保存されます。ブラウザのデータ消去で失われます。定期的にエクスポートして保管してください。</div>
       <div style="display:flex;gap:8px">
         <button class="settings-btn" style="flex:1;justify-content:center" onclick="exportData()">⬇️ エクスポート</button>
         <label class="settings-btn" style="flex:1;justify-content:center;cursor:pointer">⬆️ インポート<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>

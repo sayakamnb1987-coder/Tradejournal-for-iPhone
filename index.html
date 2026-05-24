@@ -148,6 +148,7 @@ input,select,textarea,button{font-family:inherit}
     <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">🤖 AIアドバイス用 APIキー（任意）</div>
     <div class="np-r"><input id="api-key-input" placeholder="sk-ant-..." style="font-size:13px" oninput="localStorage.setItem('tj_apikey',this.value)"></div>
     <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">📦 データバックアップ</div>
+    <div style="font-size:12px;color:var(--amber);background:var(--abg);border-radius:8px;padding:9px 11px;margin-bottom:10px;line-height:1.6">⚠️ データはこのデバイスのブラウザに保存されます。「Safariの履歴とWebサイトデータを消去」を行うと消えます。定期的にエクスポートして保管してください。</div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <button style="flex:1;padding:11px 6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:10px;font-size:13px;cursor:pointer;-webkit-appearance:none" onclick="exportData()">⬇️ エクスポート</button>
       <label style="flex:1;padding:11px 6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:10px;font-size:13px;cursor:pointer;text-align:center;display:block">⬆️ インポート<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
@@ -430,7 +431,7 @@ function renderPrev(){
 
 // ── Settings ──
 function renderThemeGrid(){
-  document.getElementById('th-grid').innerHTML=THEMES.map(t=>`<button class="th-btn" style="background:${t.bg};color:${t.t};border-color:${t.b}" onclick="applyTheme(${JSON.stringify(t)});saveTheme();renderThemeGrid()">${t.n}</button>`).join('');
+  document.getElementById('th-grid').innerHTML=THEMES.map((t,i)=>`<button class="th-btn" style="background:${t.bg};color:${t.t};border-color:${t.b}" onclick="applyTheme(THEMES[${i}]);saveTheme();renderThemeGrid()">${t.n}</button>`).join('');
 }
 function initSettingsI(){
   document.getElementById('api-key-input').value=gApiKey();
