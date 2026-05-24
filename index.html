@@ -63,6 +63,11 @@ input,select,textarea,button{font-family:inherit}
 .dbtn,.rbtn{flex:1;padding:11px 6px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:14px;font-weight:500;cursor:pointer;text-align:center;transition:all .15s;-webkit-appearance:none}
 .dbtn.buy.on{background:var(--gbg);border-color:var(--green);color:var(--green)}.dbtn.sell.on{background:var(--rbg);border-color:var(--red);color:var(--red)}
 .rbtn.win.on{background:var(--gbg);border-color:var(--green);color:var(--green)}.rbtn.loss.on{background:var(--rbg);border-color:var(--red);color:var(--red)}.rbtn.be.on{background:var(--abg);border-color:var(--amber);color:var(--amber)}
+.htf-tog{display:flex;gap:6px}
+.htf-btn{flex:1;padding:10px 4px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:15px;cursor:pointer;text-align:center;transition:all .15s;-webkit-appearance:none}
+.htf-btn.up.on{background:var(--gbg);border-color:var(--green);color:var(--green)}.htf-btn.flat.on{background:var(--abg);border-color:var(--amber);color:var(--amber)}.htf-btn.down.on{background:var(--rbg);border-color:var(--red);color:var(--red)}
+.htf-row{display:flex;align-items:center;gap:7px;padding:6px 2px;border-bottom:1px solid var(--border)}.htf-row:last-child{border-bottom:none}
+.htf-key{font-size:12px;color:var(--text2);width:70px;flex-shrink:0}.htf-wr{font-size:12px;font-weight:600;width:38px;flex-shrink:0}.htf-bg{flex:1;height:4px;background:var(--bg3);border-radius:2px}.htf-bar{height:4px;border-radius:2px}.htf-n{font-size:11px;color:var(--text3);flex-shrink:0}
 .fpick{display:flex;gap:5px;flex-wrap:wrap}
 .fopt{padding:7px 11px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s}.fopt.on{background:var(--accent);border-color:var(--accent);color:var(--at);font-weight:500}
 .idrop{border:1px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;color:var(--text3);font-size:13px;position:relative;background:var(--bg2)}
@@ -151,6 +156,7 @@ input,select,textarea,button{font-family:inherit}
   </div>
   <div class="facc"><div class="facc-h" onclick="toggleFacc('fib')"><span class="facc-t">📐 フィボナッチ分析</span><span class="facc-c" id="fc-fib">▼</span></div><div class="facc-b" id="fb-fib"></div></div>
   <div class="facc"><div class="facc-h" onclick="toggleFacc('lc')"><span class="facc-t">❌ 負けた原因ランキング</span><span class="facc-c" id="fc-lc">▼</span></div><div class="facc-b" id="fb-lc"></div></div>
+  <div class="facc"><div class="facc-h" onclick="toggleFacc('htf')"><span class="facc-t">📡 上位足方向 集計</span><span class="facc-c" id="fc-htf">▼</span></div><div class="facc-b" id="fb-htf"></div></div>
   <div class="tlist" id="tlist"></div>
 </div>
 
@@ -182,6 +188,12 @@ input,select,textarea,button{font-family:inherit}
     <div class="fsec">📐 フィボナッチ</div>
     <div class="field"><label>エントリーレベル</label><div class="fpick" id="fp-e"></div></div>
     <div class="field"><label>エグジットレベル</label><div class="fpick" id="fp-x"></div></div>
+    <div class="fsec">📡 上位足の方向</div>
+    <div class="fg3">
+      <div class="field"><label>4H</label><div class="htf-tog" id="htf-tog-4h"><button class="htf-btn up" onclick="setHTF('htf4h','UP')">↑</button><button class="htf-btn flat" onclick="setHTF('htf4h','FLAT')">→</button><button class="htf-btn down" onclick="setHTF('htf4h','DOWN')">↓</button></div></div>
+      <div class="field"><label>日足</label><div class="htf-tog" id="htf-tog-d1"><button class="htf-btn up" onclick="setHTF('htfD1','UP')">↑</button><button class="htf-btn flat" onclick="setHTF('htfD1','FLAT')">→</button><button class="htf-btn down" onclick="setHTF('htfD1','DOWN')">↓</button></div></div>
+      <div class="field"><label>週足</label><div class="htf-tog" id="htf-tog-w1"><button class="htf-btn up" onclick="setHTF('htfW1','UP')">↑</button><button class="htf-btn flat" onclick="setHTF('htfW1','FLAT')">→</button><button class="htf-btn down" onclick="setHTF('htfW1','DOWN')">↓</button></div></div>
+    </div>
     <div class="fsec">エグジット結果</div>
     <div class="fg3">
       <div class="field"><label>決済価格</label><input type="number" id="ff-exit" step="any" inputmode="decimal" placeholder="0.000"></div>
@@ -314,6 +326,7 @@ function buildAIPrompt(trades,proj){
 
 // ── iPhone state ──
 let trades=[],dir='',res='',sfE='',sfX='',selEmoji='📈',editPid=null,editTradeId=null,curPid='default';
+let htfVals={htf4h:null,htfD1:null,htfW1:null};
 let lbImgs=[],lbCaps=[],lbIdx=0;
 
 // ── Lightbox ──
@@ -412,11 +425,14 @@ function showSc(name,i){document.querySelectorAll('.screen').forEach(s=>s.classL
 // ── Form ──
 function setDir(d){dir=d;document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));document.querySelector('.dbtn.'+d.toLowerCase()).classList.add('on')}
 function setRes(r){res=r;document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('on'));document.querySelector('.rbtn.'+r.toLowerCase()).classList.add('on')}
+function setHTF(key,val){htfVals[key]=htfVals[key]===val?null:val;const togs={htf4h:'htf-tog-4h',htfD1:'htf-tog-d1',htfW1:'htf-tog-w1'};const tog=document.getElementById(togs[key]);if(tog){tog.querySelectorAll('.htf-btn').forEach(b=>b.classList.remove('on'));if(htfVals[key]){const map={UP:0,FLAT:1,DOWN:2};tog.querySelectorAll('.htf-btn')[map[htfVals[key]]].classList.add('on')}}}
+function renderHTFStats(){const fields=[{key:'htf4h',label:'4H'},{key:'htfD1',label:'日足'},{key:'htfW1',label:'週足'}];const dirs={UP:'↑',FLAT:'→',DOWN:'↓'};let rows='',has=false;fields.forEach(({key,label})=>{const s={};trades.forEach(t=>{if(!t[key])return;if(!s[t[key]])s[t[key]]={n:0,w:0};s[t[key]].n++;if(t.result==='WIN')s[t[key]].w++});const ents=Object.entries(s);if(!ents.length)return;has=true;ents.forEach(([d,v])=>{const wr=Math.round(v.w/v.n*100),col=wr>=60?'var(--green)':wr>=40?'var(--amber)':'var(--red)';rows+=`<div class="htf-row"><span class="htf-key">${label} ${dirs[d]||d}</span><span class="htf-wr" style="color:${col}">${wr}%</span><div class="htf-bg"><div class="htf-bar" style="width:${wr}%;background:${col}"></div></div><span class="htf-n">${v.n}件</span></div>`})});document.getElementById('fb-htf').innerHTML=has?rows:'<div style="color:var(--text3);font-size:12px;padding:6px 2px">上位足方向を記録すると集計されます</div>';}
 function resetForm(){
   ['ff-sym','ff-entry','ff-sl','ff-tp','ff-exit','ff-pips','ff-pnl','ff-reason','ff-good','ff-bad','ff-learn','ff-next','ff-et','ff-xt','ff-ht'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('ff-tf').value='';document.getElementById('ff-lc').value='';
   dir='';res='';sfE='';sfX='';editTradeId=null;clearPItems();
-  document.querySelectorAll('.dbtn,.rbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.dbtn,.rbtn,.htf-btn').forEach(b=>b.classList.remove('on'));
+  htfVals={htf4h:null,htfD1:null,htfW1:null};
   document.getElementById('ipg').innerHTML='';buildFP();
   document.getElementById('edit-banner').style.display='none';
   document.getElementById('sbtn').textContent='保存する';
@@ -435,7 +451,7 @@ async function saveTrade(){
     entryTime:document.getElementById('ff-et').value,exitTime:document.getElementById('ff-xt').value,holdingTime:document.getElementById('ff-ht').value,
     entry:+document.getElementById('ff-entry').value||null,sl:+document.getElementById('ff-sl').value||null,tp:+document.getElementById('ff-tp').value||null,
     exit:+document.getElementById('ff-exit').value||null,pips:+document.getElementById('ff-pips').value||null,pnl:+document.getElementById('ff-pnl').value||null,
-    result:res,fibEntry:sfE==='なし'?'':sfE,fibExit:sfX==='なし'?'':sfX,lossCause:document.getElementById('ff-lc').value,
+    result:res,fibEntry:sfE==='なし'?'':sfE,fibExit:sfX==='なし'?'':sfX,htf4h:htfVals.htf4h,htfD1:htfVals.htfD1,htfW1:htfVals.htfW1,lossCause:document.getElementById('ff-lc').value,
     reason:document.getElementById('ff-reason').value.trim(),good:document.getElementById('ff-good').value.trim(),
     bad:document.getElementById('ff-bad').value.trim(),learn:document.getElementById('ff-learn').value.trim(),next:document.getElementById('ff-next').value.trim(),
     imgs,imgCaps:[...pCaps]};
@@ -452,6 +468,8 @@ async function editTrade(id){
   const sel=document.getElementById('ff-sym');
   if(t.symbol&&!Array.from(sel.options).find(o=>o.value===t.symbol)){const opt=document.createElement('option');opt.value=t.symbol;opt.textContent=t.symbol;sel.insertBefore(opt,sel.options[1]);sel.value=t.symbol}
   dir=t.dir;res=t.result;sfE=t.fibEntry||'';sfX=t.fibExit||'';
+  htfVals={htf4h:t.htf4h||null,htfD1:t.htfD1||null,htfW1:t.htfW1||null};
+  ['htf4h','htfD1','htfW1'].forEach((key,i)=>{const togs=['htf-tog-4h','htf-tog-d1','htf-tog-w1'];const tog=document.getElementById(togs[i]);if(!tog)return;tog.querySelectorAll('.htf-btn').forEach(b=>b.classList.remove('on'));if(htfVals[key]){const map={UP:0,FLAT:1,DOWN:2};tog.querySelectorAll('.htf-btn')[map[htfVals[key]]].classList.add('on')}});
   document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));if(t.dir){const el=document.querySelector('.dbtn.'+t.dir.toLowerCase());if(el)el.classList.add('on')}
   document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('on'));if(t.result){const el=document.querySelector('.rbtn.'+t.result.toLowerCase());if(el)el.classList.add('on')}
   clearPItems();pCaps=[...(t.imgCaps||[])];
@@ -499,7 +517,7 @@ function closeM(id){document.getElementById(id).classList.remove('on')}
 
 // ── Render ──
 function render(){
-  renderStats();renderFib();renderLC();renderProjSel();
+  renderStats();renderFib();renderLC();renderHTFStats();renderProjSel();
   const list=document.getElementById('tlist');
   if(!trades.length){list.innerHTML='<div class="empty">// まだトレードがありません<br>「＋ 新規」から追加してください</div>';return}
   list.innerHTML=trades.map(t=>{
