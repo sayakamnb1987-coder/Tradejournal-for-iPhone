@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="検証ノート">
+<title>検証ノート</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<style>
+:root{--bg:#0e0f11;--bg2:#16181c;--bg3:#1e2026;--border:#2a2d35;--text:#e8eaf0;--text2:#8b90a0;--text3:#555a6a;--accent:#3ecf8e;--at:#000;--green:#3ecf8e;--gbg:#0d2318;--red:#f97066;--rbg:#2a0f0d;--amber:#f5a623;--abg:#261a07;--tbh:56px;--safe:env(safe-area-inset-bottom,16px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Noto Sans JP',sans-serif;font-size:15px;min-height:100vh;overflow-x:hidden}
+input,select,textarea,button{font-family:inherit}
+.screen{display:none;padding-bottom:calc(var(--tbh)+var(--safe)+16px)}.screen.on{display:block}
+.hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top,12px) 15px 12px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.hdr h1{font-size:17px;font-weight:700}.hdr h1 span{color:var(--accent)}.hdr-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.prow{margin-top:9px;display:flex;gap:7px;align-items:center}
+.psel{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 11px;border-radius:10px;font-size:14px;-webkit-appearance:none;outline:none}
+.ibtn-sm{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:8px 11px;border-radius:9px;cursor:pointer;font-size:13px;flex-shrink:0;-webkit-appearance:none}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:12px 15px}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px}
+.sc-l{font-size:11px;color:var(--text3);letter-spacing:.04em;margin-bottom:4px}
+.sc-v{font-size:24px;font-weight:700}.sc-v.pos{color:var(--green)}.sc-v.neg{color:var(--red)}
+.facc{margin:0 15px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.facc-h{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer}
+.facc-t{font-size:13px;font-weight:500;color:var(--text2)}.facc-c{font-size:11px;color:var(--text3);transition:transform .2s}.facc-c.on{transform:rotate(180deg)}
+.facc-b{display:none;padding:0 14px 12px}.facc-b.on{display:block}
+.fb-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}.fb-row:last-child{border-bottom:none}
+.fb-lv{font-size:12px;font-weight:500;color:var(--accent);width:52px;flex-shrink:0}.fb-wr{font-size:12px;font-weight:600;width:38px;flex-shrink:0}
+.fb-bw{flex:1;height:4px;background:var(--bg3);border-radius:2px}.fb-bar{height:4px;border-radius:2px}.fb-n{font-size:11px;color:var(--text3);flex-shrink:0}
+.lc-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}.lc-row:last-child{border-bottom:none}
+.lc-rk{font-size:11px;color:var(--text3);width:20px;text-align:center;flex-shrink:0}.lc-nm{flex:1;font-size:12px}
+.lc-bw{flex:2;height:4px;background:var(--bg3);border-radius:2px}.lc-bar{height:4px;border-radius:2px;background:var(--red)}.lc-cnt{font-size:11px;color:var(--text3);flex-shrink:0}
+.tlist{padding:0 15px}
+.tc{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:9px;overflow:hidden}
+.tc-main{display:flex;align-items:center;gap:9px;padding:13px}
+.tc-info{flex:1;min-width:0}.tc-sym{font-size:16px;font-weight:700}
+.tc-meta{display:flex;align-items:center;gap:5px;margin-top:4px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px}
+.tag.buy{background:var(--gbg);color:var(--green);border:1px solid #1a4d35}.tag.sell{background:var(--rbg);color:var(--red);border:1px solid #4d1a17}
+.tag.win{background:var(--gbg);color:var(--green);border:1px solid #1a4d35}.tag.loss{background:var(--rbg);color:var(--red);border:1px solid #4d1a17}.tag.be{background:var(--abg);color:var(--amber);border:1px solid #4d3310}
+.tag.tf{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}.tag.fib{background:var(--bg3);color:var(--accent);border:1px solid #1a4d35}
+.tc-pnl{font-size:17px;font-weight:700;text-align:right;flex-shrink:0}.tc-pnl.pos{color:var(--green)}.tc-pnl.neg{color:var(--red)}.tc-pnl.ze{color:var(--text2)}
+.tc-del{background:transparent;border:none;color:var(--text3);font-size:18px;padding:5px 7px;cursor:pointer;flex-shrink:0}
+.tc-d{border-top:1px solid var(--border);padding:12px 13px;display:none}.tc-d.on{display:block}
+.td-g{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px}
+.di label{font-size:10px;color:var(--text3);display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}.di span{font-size:13px}
+.dn{margin-bottom:8px}.dn label{font-size:10px;color:var(--text3);display:block;margin-bottom:3px;text-transform:uppercase}.dn p{font-size:13px;color:var(--text2);line-height:1.6}
+.td-imgs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}
+.td-img{border-radius:8px;overflow:hidden;background:var(--bg3);cursor:pointer}
+.td-img img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}.td-img .cap{font-size:11px;color:var(--text2);padding:4px 7px;line-height:1.4}
+.edit-btn-c{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text3);font-size:14px;cursor:pointer;margin-top:10px;-webkit-appearance:none}
+.fw{padding:14px 15px}
+.fsec{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-top:18px}.fsec:first-child{margin-top:0}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;padding:11px 13px;outline:none;-webkit-appearance:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}.field textarea{resize:none;min-height:78px;line-height:1.6}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.dtog,.rtog{display:flex;gap:7px}
+.dbtn,.rbtn{flex:1;padding:11px 6px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:14px;font-weight:500;cursor:pointer;text-align:center;transition:all .15s;-webkit-appearance:none}
+.dbtn.buy.on{background:var(--gbg);border-color:var(--green);color:var(--green)}.dbtn.sell.on{background:var(--rbg);border-color:var(--red);color:var(--red)}
+.rbtn.win.on{background:var(--gbg);border-color:var(--green);color:var(--green)}.rbtn.loss.on{background:var(--rbg);border-color:var(--red);color:var(--red)}.rbtn.be.on{background:var(--abg);border-color:var(--amber);color:var(--amber)}
+.fpick{display:flex;gap:5px;flex-wrap:wrap}
+.fopt{padding:7px 11px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:13px;cursor:pointer;transition:all .15s}.fopt.on{background:var(--accent);border-color:var(--accent);color:var(--at);font-weight:500}
+.idrop{border:1px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;color:var(--text3);font-size:13px;position:relative;background:var(--bg2)}
+.idrop input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.ipg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.ip-w{background:var(--bg3);border-radius:8px;overflow:hidden;position:relative}
+.ip-w img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;cursor:pointer}
+.ip-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.75);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+.ip-cap{width:100%;background:transparent;border:none;border-top:1px solid var(--border);color:var(--text2);font-size:11px;padding:4px 8px;outline:none}.ip-cap::placeholder{color:var(--text3)}
+.sbtn{width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;color:var(--at);font-size:16px;font-weight:700;cursor:pointer;margin-top:18px;-webkit-appearance:none}
+.edit-banner{background:#1a2040;border:1px solid #3a5080;border-radius:10px;padding:11px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#7090c0}
+.edit-banner strong{color:#90b8f0}.edit-cancel{background:transparent;border:1px solid #3a5080;color:#7090c0;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe);z-index:200;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 4px 5px;cursor:pointer;color:var(--text3);border:none;background:transparent;transition:color .15s;gap:3px}.tab.on{color:var(--accent)}
+.tab-i{font-size:20px;line-height:1}.tab-l{font-size:10px}
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;align-items:center;justify-content:center;flex-direction:column}.lb.on{display:flex}
+.lb img{max-width:95vw;max-height:78vh;border-radius:8px;object-fit:contain}
+.lb-cap{font-size:13px;color:rgba(255,255,255,.7);margin-top:9px;max-width:90vw;text-align:center}
+.lb-cl{position:fixed;top:calc(env(safe-area-inset-top,12px)+12px);right:18px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:15px;padding:7px 13px;border-radius:20px;cursor:pointer}
+.lb-nav{display:flex;gap:18px;margin-top:14px}.lb-nav button{background:rgba(255,255,255,.15);border:none;color:#fff;padding:9px 22px;border-radius:20px;font-size:15px;cursor:pointer}
+.lb-cnt{font-size:12px;color:rgba(255,255,255,.4);margin-top:7px}
+.mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:flex-end}.mbk.on{display:flex}
+.ms{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(18px + var(--safe));max-height:85vh;overflow-y:auto}
+.ms h2{font-size:16px;font-weight:700;margin-bottom:15px}
+.pi{display:flex;align-items:center;gap:9px;background:var(--bg3);border-radius:10px;padding:11px;margin-bottom:7px;cursor:pointer}
+.pi-n{flex:1;font-size:14px;font-weight:500}.pi-c{font-size:12px;color:var(--text3)}.pi-d{background:transparent;border:none;color:var(--text3);font-size:15px;padding:3px 7px;cursor:pointer}
+.pd-ta{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:10px 12px;outline:none;resize:none;min-height:80px;line-height:1.6;margin-top:7px}.pd-ta:focus{border-color:var(--accent)}
+.np-r{display:flex;gap:7px;margin-top:11px}.np-r input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:10px 12px;outline:none}
+.np-r button{padding:10px 14px;background:var(--accent);border:none;border-radius:10px;color:var(--at);font-size:14px;font-weight:700;cursor:pointer}
+.mcl{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text2);font-size:14px;cursor:pointer;margin-top:11px}
+.ep{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:11px}.ep-i{font-size:19px;cursor:pointer;padding:4px 6px;border-radius:7px;border:1px solid transparent}.ep-i.on{background:var(--bg);border-color:var(--border)}
+.sym-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
+.sym-tag{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-size:12px}.sym-tag button{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:0}
+.ai-out{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:13px;font-size:14px;line-height:1.9;color:var(--text);white-space:pre-wrap;min-height:60px}
+.hint-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin:15px;font-size:13px;color:var(--text2);line-height:1.7}
+.hint-box strong{color:var(--accent)}.empty{text-align:center;padding:50px 16px;color:var(--text3);font-size:13px;line-height:2.3}
+</style>
+</head>
+<body>
+<div class="lb" id="lb">
+  <button class="lb-cl" onclick="lbClose()">✕</button>
+  <img id="lb-img" src="" alt=""><div class="lb-cap" id="lb-cap"></div>
+  <div class="lb-nav"><button onclick="lbNav(-1)">← 前</button><button onclick="lbNav(1)">次 →</button></div>
+  <div class="lb-cnt" id="lb-cnt"></div>
+</div>
+<div class="mbk" id="m-proj" onclick="if(event.target===this)closeM('m-proj')">
+  <div class="ms">
+    <h2>📁 プロジェクト</h2>
+    <div class="ep" id="ep"></div>
+    <div id="pl"></div>
+    <div id="pd" style="display:none"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase" id="pd-t"></div><textarea class="pd-ta" id="pd-desc" placeholder="トレードルール・戦略メモ…" oninput="savePD()"></textarea></div>
+    <div class="np-r"><input id="np" placeholder="プロジェクト名" maxlength="24"><button onclick="addProj()">追加</button></div>
+    <button class="mcl" onclick="closeM('m-proj')">閉じる</button>
+  </div>
+</div>
+<div class="mbk" id="m-set" onclick="if(event.target===this)closeM('m-set')">
+  <div class="ms">
+    <h2>⚙️ 設定</h2>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:9px">銘柄リスト</div>
+    <div class="sym-list" id="sym-list"></div>
+    <div class="np-r"><input id="new-sym" placeholder="銘柄追加 (例: USD/JPY)" maxlength="20"><button onclick="addSym()">追加</button></div>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">負けた原因リスト</div>
+    <div class="sym-list" id="cause-list"></div>
+    <div class="np-r"><input id="new-cause" placeholder="カスタム原因を追加" maxlength="20"><button onclick="addCause()">追加</button></div>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">🤖 AIアドバイス用 APIキー（任意）</div>
+    <div class="np-r"><input id="api-key-input" placeholder="sk-ant-..." style="font-size:13px" oninput="localStorage.setItem('tj_apikey',this.value)"></div>
+    <button class="mcl" onclick="closeM('m-set')">閉じる</button>
+  </div>
+</div>
+
+<div class="screen on" id="sc-list">
+  <div class="hdr">
+    <h1>📈 <span>TRADE</span> 検証ノート</h1>
+    <div class="hdr-sub">データはこのデバイスに保存されます</div>
+    <div class="prow">
+      <select class="psel" id="psel" onchange="switchProj(this.value)"></select>
+      <button class="ibtn-sm" onclick="openM('m-proj');renderProjM()">📁</button>
+      <button class="ibtn-sm" onclick="openM('m-set');initSettingsI()">⚙️</button>
+    </div>
+  </div>
+  <div class="sgrid">
+    <div class="sc"><div class="sc-l">総トレード</div><div class="sc-v" id="s-tot">0</div></div>
+    <div class="sc"><div class="sc-l">勝率</div><div class="sc-v" id="s-wr">—</div></div>
+    <div class="sc"><div class="sc-l">損益合計</div><div class="sc-v" id="s-pnl">¥0</div></div>
+    <div class="sc"><div class="sc-l">平均RR</div><div class="sc-v" id="s-rr">—</div></div>
+  </div>
+  <div class="facc"><div class="facc-h" onclick="toggleFacc('fib')"><span class="facc-t">📐 フィボナッチ分析</span><span class="facc-c" id="fc-fib">▼</span></div><div class="facc-b" id="fb-fib"></div></div>
+  <div class="facc"><div class="facc-h" onclick="toggleFacc('lc')"><span class="facc-t">❌ 負けた原因ランキング</span><span class="facc-c" id="fc-lc">▼</span></div><div class="facc-b" id="fb-lc"></div></div>
+  <div class="tlist" id="tlist"></div>
+</div>
+
+<div class="screen" id="sc-form">
+  <div class="hdr"><h1 id="form-title">＋ 新規登録</h1></div>
+  <div class="fw">
+    <div id="edit-banner" class="edit-banner" style="display:none">✏️ 編集中: <strong id="edit-sym"></strong><button class="edit-cancel" onclick="cancelEdit()">✕</button></div>
+    <div class="fsec">基本情報</div>
+    <div class="fg2">
+      <div class="field"><label>📅 日付</label><input type="date" id="ff-date"></div>
+      <div class="field"><label>💱 銘柄</label><select id="ff-sym"><option value="">選択</option></select></div>
+    </div>
+    <div class="fg2">
+      <div class="field"><label>🕐 時間足</label><select id="ff-tf"><option value="">選択</option><option>1M</option><option>5M</option><option>15M</option><option>1H</option><option>4H</option><option>日足</option><option>週足</option></select></div>
+      <div class="field"><label>📊 方向</label><div class="dtog"><button class="dbtn buy" onclick="setDir('BUY')">▲ BUY</button><button class="dbtn sell" onclick="setDir('SELL')">▼ SELL</button></div></div>
+    </div>
+    <div class="fg3">
+      <div class="field"><label>⏰ エントリー</label><input type="time" id="ff-et"></div>
+      <div class="field"><label>⏰ エグジット</label><input type="time" id="ff-xt"></div>
+      <div class="field"><label>⏱ 保有時間</label><input type="text" id="ff-ht" placeholder="自動" readonly style="color:var(--text3)"></div>
+    </div>
+    <div class="fsec">エントリー</div>
+    <div class="fg3">
+      <div class="field"><label>エントリー</label><input type="number" id="ff-entry" step="any" inputmode="decimal" placeholder="0.000"></div>
+      <div class="field"><label>損切り</label><input type="number" id="ff-sl" step="any" inputmode="decimal" placeholder="0.000"></div>
+      <div class="field"><label>利確</label><input type="number" id="ff-tp" step="any" inputmode="decimal" placeholder="0.000"></div>
+    </div>
+    <div class="field"><label>📝 根拠・シナリオ</label><textarea id="ff-reason" placeholder="例: 水平線ブレイク + MA上向き"></textarea></div>
+    <div class="fsec">📐 フィボナッチ</div>
+    <div class="field"><label>エントリーレベル</label><div class="fpick" id="fp-e"></div></div>
+    <div class="field"><label>エグジットレベル</label><div class="fpick" id="fp-x"></div></div>
+    <div class="fsec">エグジット結果</div>
+    <div class="fg3">
+      <div class="field"><label>決済価格</label><input type="number" id="ff-exit" step="any" inputmode="decimal" placeholder="0.000"></div>
+      <div class="field"><label>損益(pips)</label><input type="number" id="ff-pips" step="any" inputmode="decimal" placeholder="+24"></div>
+      <div class="field"><label>損益(円)</label><input type="number" id="ff-pnl" step="any" inputmode="decimal" placeholder="4800"></div>
+    </div>
+    <div class="field"><label>🏁 結果</label><div class="rtog"><button class="rbtn win" onclick="setRes('WIN')">✅WIN</button><button class="rbtn loss" onclick="setRes('LOSS')">❌LOSS</button><button class="rbtn be" onclick="setRes('BE')">➖BE</button></div></div>
+    <div class="field"><label>❌ 負けた原因</label><select id="ff-lc"><option value="">選択（任意）</option></select></div>
+    <div class="fsec">🖼 チャート画像</div>
+    <div class="field">
+      <div class="idrop"><input type="file" id="ff-imgs" accept="image/*" multiple onchange="handleImgs(event)">📷 タップして画像を追加（複数可）</div>
+      <div class="ipg" id="ipg"></div>
+    </div>
+    <div class="fsec">振り返り</div>
+    <div class="field"><label>✅ 良かった点</label><textarea id="ff-good"></textarea></div>
+    <div class="field"><label>❌ 改善点</label><textarea id="ff-bad"></textarea></div>
+    <div class="field"><label>💡 学び・気づき</label><textarea id="ff-learn"></textarea></div>
+    <div class="field"><label>🔁 次回に活かすこと</label><textarea id="ff-next"></textarea></div>
+    <button class="sbtn" id="sbtn" onclick="saveTrade()">保存する</button>
+  </div>
+</div>
+
+<div class="screen" id="sc-ai">
+  <div class="hdr"><h1>🤖 AIアドバイス</h1></div>
+  <div style="padding:14px">
+    <button style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;color:var(--at);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:14px" onclick="callAI(buildAIPrompt(trades,gProjs().find(p=>p.id===curPid)||{name:'—',desc:''}),'ai-sc-out')">分析する</button>
+    <div class="ai-out" id="ai-sc-out">「分析する」をタップしてください</div>
+  </div>
+  <div class="hint-box">
+    <strong>📱 ホーム画面への追加方法</strong><br>
+    1. このページを Safari で開く<br>
+    2. 下部の共有ボタン（□↑）をタップ<br>
+    3.「ホーム画面に追加」を選択→「追加」<br><br>
+    ※ Filesアプリから開いた場合は<br>
+    　共有→「Safariで開く」を先に選択
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="showSc('list',0)" id="tb0"><div class="tab-i">📋</div><div class="tab-l">一覧</div></button>
+  <button class="tab" onclick="showSc('form',1)" id="tb1"><div class="tab-i">＋</div><div class="tab-l">新規</div></button>
+  <button class="tab" onclick="showSc('ai',2)" id="tb2"><div class="tab-i">🤖</div><div class="tab-l">AI</div></button>
+</div>
+
+<script>
+
+// ── Constants ──
+const MAX_PX=700,IMG_Q=0.38;
+const FIBS_E=['23.6%','38.2%','50.0%','61.8%','78.6%','100%'];
+const FIBS_X=['23.6%','38.2%','50.0%','61.8%','78.6%','100%','127.2%','161.8%'];
+const EMOJIS=['📈','📉','⚡','🎯','🔥','💎','🦁','🐉','🌙','🏆','⚔️','🧠','🦊','🐯','🌊'];
+const DEF_CAUSES=['ルール違反','逆張り','損切り遅延','過大ロット','確認不足','感情トレード','エントリー早すぎ','その他'];
+const THEMES=[
+  {n:'ダーク',bg:'#0e0f11',bg2:'#16181c',bg3:'#1e2026',b:'#2a2d35',b2:'#353840',t:'#e8eaf0',t2:'#8b90a0',t3:'#555a6a',ac:'#3ecf8e',at:'#000',sl:'#555a6a',sv:'#e8eaf0',svp:'#3ecf8e',svn:'#f97066'},
+  {n:'ライト',bg:'#f5f5f0',bg2:'#fff',bg3:'#f0eeeb',b:'#ddd9d0',b2:'#c8c4bb',t:'#1a1a18',t2:'#666660',t3:'#aaa9a0',ac:'#1a6ef5',at:'#fff',sl:'#888880',sv:'#1a1a18',svp:'#1a6ef5',svn:'#d43020'},
+  {n:'ネイビー',bg:'#0a0e1a',bg2:'#111525',bg3:'#192035',b:'#1e2a45',b2:'#2a3a60',t:'#d0d8f0',t2:'#7080a8',t3:'#3a4868',ac:'#4d9de0',at:'#fff',sl:'#3a4868',sv:'#d0d8f0',svp:'#4d9de0',svn:'#e06060'},
+  {n:'フォレスト',bg:'#0c140e',bg2:'#131d14',bg3:'#1a2a1b',b:'#233025',b2:'#2e4030',t:'#d4e8d0',t2:'#6a8870',t3:'#3a5040',ac:'#58c67a',at:'#000',sl:'#3a5040',sv:'#d4e8d0',svp:'#58c67a',svn:'#e07060'},
+  {n:'セピア',bg:'#1a1208',bg2:'#221a0c',bg3:'#2c2210',b:'#3a2e18',b2:'#4a3c22',t:'#e8d8b0',t2:'#a09060',t3:'#605830',ac:'#d4a030',at:'#000',sl:'#705830',sv:'#e8d8b0',svp:'#d4a030',svn:'#c04030'},
+  {n:'ローズ',bg:'#160c10',bg2:'#1e1016',bg3:'#28141c',b:'#3a1e28',b2:'#4a2838',t:'#ecd8e0',t2:'#a07080',t3:'#604050',ac:'#e06090',at:'#fff',sl:'#604050',sv:'#ecd8e0',svp:'#e06090',svn:'#e08040'},
+  {n:'白黒',bg:'#111',bg2:'#1c1c1c',bg3:'#242424',b:'#333',b2:'#444',t:'#eee',t2:'#888',t3:'#555',ac:'#fff',at:'#000',sl:'#555',sv:'#eee',svp:'#aaa',svn:'#888'},
+  {n:'ペーパー',bg:'#faf7f0',bg2:'#f2ede4',bg3:'#e8e2d8',b:'#cdc8be',b2:'#b8b2a8',t:'#2a2620',t2:'#6a6058',t3:'#a09888',ac:'#8b4513',at:'#fff',sl:'#a09888',sv:'#2a2620',svp:'#5a7a2a',svn:'#a02010'},
+];
+
+// ── localStorage helpers ──
+function gProjs(){try{return JSON.parse(localStorage.getItem('tj_projs')||'null')||[{id:'default',name:'メインルール',emoji:'📈',desc:''}]}catch{return [{id:'default',name:'メインルール',emoji:'📈',desc:''}]}}
+function sProjs(p){ls('tj_projs',JSON.stringify(p))}
+function gTrades(pid){try{return JSON.parse(localStorage.getItem('tj_t_'+pid)||'[]')}catch{return []}}
+function sTrades(pid,t){ls('tj_t_'+pid,JSON.stringify(t))}
+function gSyms(){try{return JSON.parse(localStorage.getItem('tj_syms')||'null')||['USD/JPY','EUR/JPY','GBP/JPY','EUR/USD','GBP/USD','AUD/USD']}catch{return ['USD/JPY','EUR/JPY','GBP/JPY']}}
+function sSyms(s){ls('tj_syms',JSON.stringify(s))}
+function gCauses(){try{const c=JSON.parse(localStorage.getItem('tj_causes')||'[]');return [...DEF_CAUSES,...c.filter(x=>!DEF_CAUSES.includes(x))]}catch{return DEF_CAUSES}}
+function gApiKey(){return localStorage.getItem('tj_apikey')||''}
+function ls(k,v){try{localStorage.setItem(k,v);return true}catch(e){alert('⚠️ 保存容量が不足しています。古いトレードを削除するか、画像を減らしてください。');return false}}
+
+// ── Image handling ──
+// pItems = [{file:File|null, b64:string|null, url:string}]
+let pItems=[],pCaps=[];
+
+function b64ToUrl(b64){
+  try{const a=b64.split(','),m=a[0].match(/:(.*?);/)[1],bs=atob(a[1]),u=new Uint8Array(bs.length);for(let n=0;n<bs.length;n++)u[n]=bs.charCodeAt(n);return URL.createObjectURL(new Blob([u],{type:m}))}
+  catch{return ''}
+}
+function clearPItems(){pItems=[];pCaps=[]}
+
+// ── Theme ──
+const R=document.documentElement.style;
+function applyTheme(t){
+  const m={bg:'--bg',bg2:'--bg2',bg3:'--bg3',b:'--border',b2:'--border2',t:'--text',t2:'--text2',t3:'--text3',ac:'--accent',at:'--at',sl:'--slc',sv:'--svc',svp:'--svp',svn:'--svn'};
+  Object.entries(m).forEach(([k,v])=>{if(t[k])R.setProperty(v,t[k])});
+}
+function sv(v,val){R.setProperty(v,val);if(v==='--accent')R.setProperty('--at',isLt(val)?'#000':'#fff');saveTheme()}
+function isLt(h){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return(r*299+g*587+b*114)/1000>145}
+function gv(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function saveTheme(){const keys=['--bg','--bg2','--bg3','--border','--border2','--text','--text2','--text3','--accent','--at','--slc','--svc','--svp','--svn'];const o={};keys.forEach(k=>o[k]=gv(k));ls('tj_theme',JSON.stringify(o))}
+function loadTheme(){try{const t=JSON.parse(localStorage.getItem('tj_theme')||'null');if(t)Object.entries(t).forEach(([k,v])=>R.setProperty(k,v))}catch{}}
+
+// ── AI Advice ──
+async function callAI(prompt,outputId){
+  const el=document.getElementById(outputId);
+  if(!el)return;
+  el.textContent='🤖 分析中...';
+  const apiKey=gApiKey();
+  const headers={'Content-Type':'application/json','anthropic-version':'2023-06-01'};
+  if(apiKey)headers['x-api-key']=apiKey;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers,
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    if(resp.status===401||resp.status===403){
+      el.innerHTML='<span style="color:var(--red)">🔑 APIキーが必要です。設定画面でAnthropicのAPIキーを入力してください。</span>';return;
+    }
+    const data=await resp.json();
+    el.textContent=data.content?.[0]?.text||'取得できませんでした。';
+  }catch(err){
+    el.innerHTML='<span style="color:var(--red)">⚠️ ネットワークエラー: '+err.message+'<br><br>このファイルをブラウザで開いて試してください。file:// では一部のブラウザがAPIリクエストをブロックします。</span>';
+  }
+}
+function buildAIPrompt(trades,proj){
+  const tot=trades.length,wins=trades.filter(t=>t.result==='WIN').length;
+  const wr=tot>0?Math.round(wins/tot*100):0;
+  const pnl=trades.reduce((s,t)=>s+(t.pnl||0),0);
+  const rrs=trades.map(t=>{if(!t.entry||!t.sl||!t.tp)return null;const r=Math.abs(t.sl-t.entry),w=Math.abs(t.tp-t.entry);return r===0?null:Math.round(w/r*10)/10}).filter(r=>r!==null);
+  const avgR=rrs.length?Math.round(rrs.reduce((a,b)=>a+b,0)/rrs.length*10)/10:'—';
+  const fst=Object.entries((() => {const s={};trades.forEach(t=>{if(!t.fibEntry)return;if(!s[t.fibEntry])s[t.fibEntry]={n:0,w:0};s[t.fibEntry].n++;if(t.result==='WIN')s[t.fibEntry].w++});return s})()).map(([k,v])=>`${k}:${v.n}回 勝率${Math.round(v.w/v.n*100)}%`).join(', ')||'なし';
+  const lcst=Object.entries((() => {const c={};trades.filter(t=>t.result==='LOSS'&&t.lossCause).forEach(t=>{c[t.lossCause]=(c[t.lossCause]||0)+1});return c})()).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k}:${v}回`).join(', ')||'なし';
+  const recent=trades.slice(0,5).map(t=>`${t.date||''} ${t.symbol||''} ${t.dir} ${t.result} ${t.pnl!=null?(t.pnl>=0?'+':'')+t.pnl+'円':''}`).join(' | ');
+  return `あなたはFXトレードの専門コーチです。データを分析して具体的アドバイスを日本語で。\nプロジェクト:${proj.name} ルール:${proj.desc||'なし'}\n統計:${tot}回 勝率${wr}% 損益¥${pnl} avgRR:${avgR}\nFib:${fst}\n負け原因:${lcst}\n最近:${recent}\n\n1.強み 2.最優先改善点 3.来週のアクション3つ を350字程度で。`;
+}
+
+// ── iPhone state ──
+let trades=[],dir='',res='',sfE='',sfX='',selEmoji='📈',editPid=null,editTradeId=null,curPid='default';
+let lbImgs=[],lbCaps=[],lbIdx=0;
+
+// ── Lightbox ──
+function lbOpen(tid,idx){const t=trades.find(x=>x.id===tid);if(!t)return;lbImgs=t.imgs||[];lbCaps=t.imgCaps||[];lbIdx=idx;document.getElementById('lb-img').src=lbImgs[idx]||'';document.getElementById('lb-cap').textContent=lbCaps[idx]||'';document.getElementById('lb-cnt').textContent=(idx+1)+' / '+lbImgs.length;document.getElementById('lb').classList.add('on')}
+function lbOpenP(i){lbImgs=pItems.map(x=>x.url);lbCaps=pCaps;lbIdx=i;document.getElementById('lb-img').src=pItems[i].url;document.getElementById('lb-cap').textContent=pCaps[i]||'';document.getElementById('lb-cnt').textContent=(i+1)+' / '+pItems.length;document.getElementById('lb').classList.add('on')}
+function lbClose(){document.getElementById('lb').classList.remove('on')}
+function lbNav(d){lbIdx=(lbIdx+d+lbImgs.length)%lbImgs.length;document.getElementById('lb-img').src=lbImgs[lbIdx]||'';document.getElementById('lb-cap').textContent=lbCaps[lbIdx]||'';document.getElementById('lb-cnt').textContent=(lbIdx+1)+' / '+lbImgs.length}
+
+// ── Preview ──
+async function compressFile(file){
+  const MAX=900;
+  if(typeof createImageBitmap!=='undefined'){
+    try{
+      const bm=await createImageBitmap(file);
+      const sc=Math.min(1,MAX/Math.max(bm.width,bm.height));
+      const cv=document.createElement('canvas');
+      cv.width=Math.round(bm.width*sc);cv.height=Math.round(bm.height*sc);
+      cv.getContext('2d').drawImage(bm,0,0,cv.width,cv.height);
+      bm.close();
+      const result=cv.toDataURL('image/jpeg',.68);
+      cv.width=0;cv.height=0;
+      return result;
+    }catch(e){}
+  }
+  return new Promise(resolve=>{
+    const url=URL.createObjectURL(file);
+    const im=new Image();
+    im.onload=()=>{
+      try{
+        const sc=Math.min(1,MAX/Math.max(im.width,im.height));
+        const cv=document.createElement('canvas');
+        cv.width=Math.round(im.width*sc);cv.height=Math.round(im.height*sc);
+        cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
+        const result=cv.toDataURL('image/jpeg',.68);
+        cv.width=0;cv.height=0;
+        URL.revokeObjectURL(url);
+        resolve(result);
+      }catch{URL.revokeObjectURL(url);resolve(null)}
+    };
+    im.onerror=()=>{URL.revokeObjectURL(url);resolve(null)};
+    im.src=url;
+  });
+}
+async function handleImgs(e){
+  const files=Array.from(e.target.files);if(!files.length)return;
+  const cn=document.getElementById('cnote');if(cn)cn.textContent='📷 変換中...';
+  for(const f of files){
+    const b64=await compressFile(f);
+    if(b64){pItems.push({file:null,b64,url:b64});pCaps.push('')}
+  }
+  if(cn)cn.textContent='';
+  renderPrev();
+  e.target.value='';
+}
+function renderPrev(){
+  const g=document.getElementById('ipg');g.innerHTML='';
+  pItems.forEach((item,i)=>{
+    const w=document.createElement('div');w.className='ip-w';
+    const img=document.createElement('img');
+    img.src=item.b64;
+    img.onclick=()=>lbOpenP(i);
+    const rm=document.createElement('button');rm.className='ip-rm';rm.textContent='✕';
+    rm.onclick=()=>{pItems.splice(i,1);pCaps.splice(i,1);renderPrev()};
+    const cap=document.createElement('input');cap.className='ip-cap';cap.placeholder='コメント';cap.value=pCaps[i]||'';cap.oninput=function(){pCaps[i]=this.value};
+    w.append(img,rm,cap);g.appendChild(w);
+  });
+}
+
+// ── Settings ──
+function initSettingsI(){
+  document.getElementById('api-key-input').value=gApiKey();
+  renderSymList();renderCauseList();
+}
+function renderSymSel(){const s=gSyms();document.getElementById('ff-sym').innerHTML='<option value="">選択</option>'+s.map(x=>`<option>${x}</option>`).join('')+'<option value="__c">カスタム…</option>'}
+function renderSymList(){const s=gSyms();document.getElementById('sym-list').innerHTML=s.map(x=>`<div class="sym-tag">${x}<button onclick="delSym('${x}')">✕</button></div>`).join('');renderSymSel()}
+function addSym(){const v=document.getElementById('new-sym').value.trim().toUpperCase();if(!v)return;const s=gSyms();if(!s.includes(v)){s.push(v);sSyms(s)}document.getElementById('new-sym').value='';renderSymList()}
+function delSym(v){sSyms(gSyms().filter(x=>x!==v));renderSymList()}
+function renderCauseSel(){const el=document.getElementById('ff-lc');if(el)el.innerHTML='<option value="">選択（任意）</option>'+gCauses().map(c=>`<option>${c}</option>`).join('')}
+function renderCauseList(){const custom=JSON.parse(localStorage.getItem('tj_causes')||'[]');document.getElementById('cause-list').innerHTML=DEF_CAUSES.map(c=>`<div class="sym-tag" style="opacity:.6">${c}</div>`).join('')+custom.map(c=>`<div class="sym-tag">${c}<button onclick="delCause('${c}')">✕</button></div>`).join('');renderCauseSel()}
+function addCause(){const v=document.getElementById('new-cause').value.trim();if(!v)return;const c=JSON.parse(localStorage.getItem('tj_causes')||'[]');if(!gCauses().includes(v)){c.push(v);ls('tj_causes',JSON.stringify(c))}document.getElementById('new-cause').value='';renderCauseList()}
+function delCause(v){const c=JSON.parse(localStorage.getItem('tj_causes')||'[]').filter(x=>x!==v);ls('tj_causes',JSON.stringify(c));renderCauseList()}
+document.getElementById('ff-sym').addEventListener('change',function(){if(this.value==='__c'){const v=prompt('銘柄を入力');if(v){const s=gSyms();if(!s.includes(v.toUpperCase())){s.push(v.toUpperCase());sSyms(s);renderSymSel()}this.value=v.toUpperCase()}else this.value=''}});
+
+// ── Fib & Hold ──
+function buildFP(){
+  document.getElementById('fp-e').innerHTML=['なし',...FIBS_E].map(f=>`<button class="fopt${f===sfE?' on':''}" onclick="sfE='${f}';buildFP()">${f}</button>`).join('');
+  document.getElementById('fp-x').innerHTML=['なし',...FIBS_X].map(f=>`<button class="fopt${f===sfX?' on':''}" onclick="sfX='${f}';buildFP()">${f}</button>`).join('');
+}
+function calcHT(){const et=document.getElementById('ff-et').value,xt=document.getElementById('ff-xt').value;if(!et||!xt){document.getElementById('ff-ht').value='';return}const[eh,em]=et.split(':').map(Number),[xh,xm]=xt.split(':').map(Number);let m=(xh*60+xm)-(eh*60+em);if(m<0)m+=1440;const h=Math.floor(m/60),mn=m%60;document.getElementById('ff-ht').value=h>0?`${h}時間${mn>0?mn+'分':''}`:`${mn}分`}
+document.getElementById('ff-et').addEventListener('change',calcHT);
+document.getElementById('ff-xt').addEventListener('change',calcHT);
+
+// ── Screen nav ──
+function showSc(name,i){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById('sc-'+name).classList.add('on');document.querySelectorAll('.tab').forEach((b,j)=>b.classList.toggle('on',j===i));if(name==='form'&&!editTradeId){document.getElementById('ff-date').value=new Date().toISOString().split('T')[0];buildFP();renderSymSel();renderCauseSel()}window.scrollTo(0,0)}
+
+// ── Form ──
+function setDir(d){dir=d;document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));document.querySelector('.dbtn.'+d.toLowerCase()).classList.add('on')}
+function setRes(r){res=r;document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('on'));document.querySelector('.rbtn.'+r.toLowerCase()).classList.add('on')}
+function resetForm(){
+  ['ff-sym','ff-entry','ff-sl','ff-tp','ff-exit','ff-pips','ff-pnl','ff-reason','ff-good','ff-bad','ff-learn','ff-next','ff-et','ff-xt','ff-ht'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.getElementById('ff-tf').value='';document.getElementById('ff-lc').value='';
+  dir='';res='';sfE='';sfX='';editTradeId=null;clearPItems();
+  document.querySelectorAll('.dbtn,.rbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('ipg').innerHTML='';buildFP();
+  document.getElementById('edit-banner').style.display='none';
+  document.getElementById('sbtn').textContent='保存する';
+  document.getElementById('form-title').textContent='＋ 新規登録';
+}
+function cancelEdit(){resetForm();showSc('list',0)}
+async function saveTrade(){
+  const sym=document.getElementById('ff-sym').value;
+  if(!sym){alert('銘柄を選択してください');return}
+  if(!dir){alert('売買方向を選択してください');return}
+  if(!res){alert('結果を選択してください');return}
+  document.getElementById('sbtn').textContent='保存中…';
+  const isEdit=!!editTradeId;const id=isEdit?editTradeId:Date.now();
+  const imgs=pItems.map(x=>x.b64).filter(Boolean);
+  const t={id,date:document.getElementById('ff-date').value,symbol:sym,tf:document.getElementById('ff-tf').value,dir,
+    entryTime:document.getElementById('ff-et').value,exitTime:document.getElementById('ff-xt').value,holdingTime:document.getElementById('ff-ht').value,
+    entry:+document.getElementById('ff-entry').value||null,sl:+document.getElementById('ff-sl').value||null,tp:+document.getElementById('ff-tp').value||null,
+    exit:+document.getElementById('ff-exit').value||null,pips:+document.getElementById('ff-pips').value||null,pnl:+document.getElementById('ff-pnl').value||null,
+    result:res,fibEntry:sfE==='なし'?'':sfE,fibExit:sfX==='なし'?'':sfX,lossCause:document.getElementById('ff-lc').value,
+    reason:document.getElementById('ff-reason').value.trim(),good:document.getElementById('ff-good').value.trim(),
+    bad:document.getElementById('ff-bad').value.trim(),learn:document.getElementById('ff-learn').value.trim(),next:document.getElementById('ff-next').value.trim(),
+    imgs,imgCaps:[...pCaps]};
+  if(isEdit){trades=trades.map(x=>x.id===id?t:x)}else{trades.unshift(t)}
+  if(!sTrades(curPid,trades)){document.getElementById('sbtn').textContent='保存する';return}
+  resetForm();showSc('list',0);render();
+}
+async function editTrade(id){
+  const t=trades.find(x=>x.id===id);if(!t)return;
+  editTradeId=id;renderSymSel();renderCauseSel();
+  const fids=['ff-date','ff-sym','ff-tf','ff-et','ff-xt','ff-ht','ff-entry','ff-sl','ff-tp','ff-exit','ff-pips','ff-pnl','ff-lc','ff-reason','ff-good','ff-bad','ff-learn','ff-next'];
+  const vals=[t.date,t.symbol,t.tf,t.entryTime,t.exitTime,t.holdingTime,t.entry,t.sl,t.tp,t.exit,t.pips,t.pnl,t.lossCause,t.reason,t.good,t.bad,t.learn,t.next];
+  fids.forEach((fid,j)=>{const el=document.getElementById(fid);if(el)el.value=vals[j]||''});
+  const sel=document.getElementById('ff-sym');
+  if(t.symbol&&!Array.from(sel.options).find(o=>o.value===t.symbol)){const opt=document.createElement('option');opt.value=t.symbol;opt.textContent=t.symbol;sel.insertBefore(opt,sel.options[1]);sel.value=t.symbol}
+  dir=t.dir;res=t.result;sfE=t.fibEntry||'';sfX=t.fibExit||'';
+  document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));if(t.dir){const el=document.querySelector('.dbtn.'+t.dir.toLowerCase());if(el)el.classList.add('on')}
+  document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('on'));if(t.result){const el=document.querySelector('.rbtn.'+t.result.toLowerCase());if(el)el.classList.add('on')}
+  clearPItems();pCaps=[...(t.imgCaps||[])];
+  (t.imgs||[]).forEach(b64=>{const url=b64ToUrl(b64);pItems.push({file:null,b64,url})});
+  showSc('form',1);buildFP();renderPrev();
+  document.getElementById('edit-banner').style.display='flex';
+  document.getElementById('edit-sym').textContent=t.symbol+' ('+t.date+')';
+  document.getElementById('sbtn').textContent='更新する';
+  document.getElementById('form-title').textContent='✏️ 編集中';
+}
+function delTrade(id){if(!confirm('削除しますか？'))return;trades=trades.filter(x=>x.id!==id);sTrades(curPid,trades);render()}
+
+// ── Projects ──
+function renderProjSel(){const p=gProjs();document.getElementById('psel').innerHTML=p.map(x=>`<option value="${x.id}"${x.id===curPid?' selected':''}>${x.emoji||'📈'} ${x.name}</option>`).join('')}
+function switchProj(id){curPid=id;localStorage.setItem('tj_curproj',id);trades=gTrades(id);render()}
+function renderProjM(){
+  document.getElementById('ep').innerHTML=EMOJIS.map(e=>`<span class="ep-i${e===selEmoji?' on':''}" onclick="selEmoji='${e}';renderProjM()">${e}</span>`).join('');
+  const p=gProjs();
+  document.getElementById('pl').innerHTML=p.map(x=>`<div class="pi" onclick="selEditP('${x.id}')"><span>${x.emoji||'📈'}</span><span class="pi-n">${x.name}</span><span class="pi-c">${gTrades(x.id).length}件</span>${x.id!=='default'?`<button class="pi-d" onclick="event.stopPropagation();delProj('${x.id}')">✕</button>`:''}</div>`).join('');
+  if(editPid){const ep=p.find(x=>x.id===editPid);if(ep){document.getElementById('pd').style.display='block';document.getElementById('pd-t').textContent=ep.name+' のメモ';document.getElementById('pd-desc').value=ep.desc||''}}
+}
+function selEditP(id){editPid=id;renderProjM()}
+function savePD(){const p=gProjs();const proj=p.find(x=>x.id===editPid);if(proj){proj.desc=document.getElementById('pd-desc').value;sProjs(p)}}
+function addProj(){const name=document.getElementById('np').value.trim();if(!name)return;const p=gProjs();p.push({id:'p_'+Date.now(),name,emoji:selEmoji,desc:''});sProjs(p);document.getElementById('np').value='';renderProjM();renderProjSel()}
+function delProj(id){if(!confirm('削除しますか？'))return;let p=gProjs().filter(x=>x.id!==id);localStorage.removeItem('tj_t_'+id);sProjs(p);if(curPid===id){curPid='default';trades=gTrades('default')}renderProjSel();renderProjM();render()}
+
+// ── Stats ──
+function renderStats(){
+  const tot=trades.length,wins=trades.filter(t=>t.result==='WIN').length;const wr=tot>0?Math.round(wins/tot*100):null;const pnl=trades.reduce((s,t)=>s+(t.pnl||0),0);const rrs=trades.map(t=>{if(!t.entry||!t.sl||!t.tp)return null;const r=Math.abs(t.sl-t.entry),w=Math.abs(t.tp-t.entry);return r===0?null:Math.round(w/r*10)/10}).filter(r=>r!==null);const avgR=rrs.length?Math.round(rrs.reduce((a,b)=>a+b,0)/rrs.length*10)/10:null;
+  document.getElementById('s-tot').textContent=tot;
+  const we=document.getElementById('s-wr');we.textContent=wr!==null?wr+'%':'—';we.className='sc-v'+(wr>=50?' pos':wr!==null?' neg':'');
+  const pe=document.getElementById('s-pnl');pe.textContent=tot>0?(pnl>=0?'+':'')+'¥'+pnl.toLocaleString():'¥0';pe.className='sc-v'+(pnl>0?' pos':pnl<0?' neg':'');
+  document.getElementById('s-rr').textContent=avgR!==null?avgR:'—';
+}
+function renderFib(){
+  const s={};trades.forEach(t=>{if(!t.fibEntry)return;if(!s[t.fibEntry])s[t.fibEntry]={n:0,w:0};s[t.fibEntry].n++;if(t.result==='WIN')s[t.fibEntry].w++});
+  const levs=FIBS_E.filter(f=>s[f]);if(!levs.length){document.getElementById('fb-fib').innerHTML='<div style="color:var(--text3);font-size:12px;padding:6px 2px">フィボレベルを登録すると集計されます</div>';return}
+  const mx=Math.max(...levs.map(f=>s[f].n>0?s[f].w/s[f].n*100:0),1);
+  document.getElementById('fb-fib').innerHTML=levs.map(f=>{const x=s[f],wr=Math.round(x.w/x.n*100),bw=Math.round(wr/mx*100),col=wr>=60?'var(--green)':wr>=40?'var(--amber)':'var(--red)';return`<div class="fb-row"><span class="fb-lv">${f}</span><span class="fb-wr" style="color:${col}">${wr}%</span><div class="fb-bw"><div class="fb-bar" style="width:${bw}%;background:${col}"></div></div><span class="fb-n">${x.n}件</span></div>`}).join('');
+}
+function renderLC(){const cnt={};trades.filter(t=>t.result==='LOSS'&&t.lossCause).forEach(t=>{cnt[t.lossCause]=(cnt[t.lossCause]||0)+1});const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);const mx=sorted[0]?.[1]||1;if(!sorted.length){document.getElementById('fb-lc').innerHTML='<div style="color:var(--text3);font-size:12px;padding:6px 2px">負けた原因を記録すると集計されます</div>';return}document.getElementById('fb-lc').innerHTML=sorted.map(([c,n],i)=>`<div class="lc-row"><div class="lc-rk">${i+1}</div><div class="lc-nm">${c}</div><div class="lc-bw"><div class="lc-bar" style="width:${Math.round(n/mx*100)}%"></div></div><div class="lc-cnt">${n}回</div></div>`).join('')}
+function toggleFacc(k){document.getElementById('fb-'+k).classList.toggle('on');document.getElementById('fc-'+k).classList.toggle('on')}
+function openM(id){document.getElementById(id).classList.add('on')}
+function closeM(id){document.getElementById(id).classList.remove('on')}
+
+// ── Render ──
+function render(){
+  renderStats();renderFib();renderLC();renderProjSel();
+  const list=document.getElementById('tlist');
+  if(!trades.length){list.innerHTML='<div class="empty">// まだトレードがありません<br>「＋ 新規」から追加してください</div>';return}
+  list.innerHTML=trades.map(t=>{
+    const pnl=t.pnl,pc=pnl>0?'pos':pnl<0?'neg':'ze',ps=pnl!=null?(pnl>=0?'+':'')+'¥'+pnl.toLocaleString():'—';
+    const imgSlots=(t.imgs||[]).map((_,i)=>`<div class="td-img" id="isl_${t.id}_${i}"></div>`).join('');
+    return`<div class="tc">
+      <div class="tc-main" onclick="document.getElementById('tc_${t.id}').classList.toggle('on')">
+        <div class="tc-info">
+          <div class="tc-sym">${t.symbol||'—'}</div>
+          <div class="tc-meta">
+            <span class="tag ${t.dir.toLowerCase()}">${t.dir==='BUY'?'▲':'▼'} ${t.dir}</span>
+            <span class="tag ${t.result.toLowerCase()}">${t.result}</span>
+            ${t.tf?`<span class="tag tf">${t.tf}</span>`:''}
+            ${t.fibEntry?`<span class="tag fib">${t.fibEntry}</span>`:''}
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">${t.date||''}${t.holdingTime?' · '+t.holdingTime:''}</div>
+        </div>
+        <div class="tc-pnl ${pc}">${ps}</div>
+        <button class="tc-del" onclick="event.stopPropagation();delTrade(${t.id})">🗑</button>
+      </div>
+      <div class="tc-d" id="tc_${t.id}">
+        <div class="td-g">
+          <div class="di"><label>エントリー</label><span>${t.entry||'—'}</span></div>
+          <div class="di"><label>損切り</label><span>${t.sl||'—'}</span></div>
+          <div class="di"><label>利確</label><span>${t.tp||'—'}</span></div>
+          <div class="di"><label>決済</label><span>${t.exit||'—'}</span></div>
+          <div class="di"><label>保有時間</label><span>${t.holdingTime||'—'}</span></div>
+          <div class="di"><label>Fib</label><span style="color:var(--accent)">${t.fibEntry||'—'}</span></div>
+        </div>
+        ${t.lossCause?`<div class="dn"><label>負けた原因</label><p style="color:var(--red)">${t.lossCause}</p></div>`:''}
+        ${t.reason?`<div class="dn"><label>根拠</label><p>${t.reason}</p></div>`:''}
+        ${t.good?`<div class="dn"><label>✅ 良かった点</label><p>${t.good}</p></div>`:''}
+        ${t.bad?`<div class="dn"><label>❌ 改善点</label><p>${t.bad}</p></div>`:''}
+        ${t.learn?`<div class="dn"><label>💡 学び</label><p>${t.learn}</p></div>`:''}
+        ${t.next?`<div class="dn"><label>🔁 次回へ</label><p>${t.next}</p></div>`:''}
+        ${(t.imgs||[]).length?`<div class="td-imgs">${imgSlots}</div>`:''}
+        <button class="edit-btn-c" onclick="editTrade(${t.id})">✏️ このトレードを編集</button>
+      </div>
+    </div>`;
+  }).join('');
+  // DOM操作で画像をセット
+  trades.forEach(t=>{
+    if(!t.imgs||!t.imgs.length)return;
+    t.imgs.forEach((src,i)=>{
+      const slot=document.getElementById('isl_'+t.id+'_'+i);
+      if(!slot||!src)return;
+      const img=document.createElement('img');
+      img.src=src;
+      img.onclick=()=>lbOpen(t.id,i);
+      slot.appendChild(img);
+      const cap=(t.imgCaps||[])[i]||'';
+      if(cap){const dv=document.createElement('div');dv.className='cap';dv.textContent=cap;slot.appendChild(dv)}
+    });
+  });
+}
+
+// ── Init ──
+loadTheme();
+curPid=localStorage.getItem('tj_curproj')||'default';
+trades=gTrades(curPid);
+renderProjSel();renderSymSel();renderCauseSel();render();buildFP();
+document.getElementById('ff-date').value=new Date().toISOString().split('T')[0];
+document.getElementById('api-key-input').value=gApiKey();
+</script>
+</body>
+</html>
