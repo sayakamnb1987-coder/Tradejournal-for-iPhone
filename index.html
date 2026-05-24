@@ -124,7 +124,12 @@ input,select,textarea,button{font-family:inherit}
     <h2>📁 プロジェクト</h2>
     <div class="ep" id="ep"></div>
     <div id="pl"></div>
-    <div id="pd" style="display:none"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase" id="pd-t"></div><textarea class="pd-ta" id="pd-desc" placeholder="トレードルール・戦略メモ…" oninput="savePD()"></textarea></div>
+    <div id="pd" style="display:none">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase">プロジェクト名</div>
+      <input id="pd-name" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;padding:9px 12px;margin-bottom:10px;outline:none;-webkit-appearance:none" placeholder="プロジェクト名" oninput="saveProjName()">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase">ルール・メモ</div>
+      <textarea class="pd-ta" id="pd-desc" placeholder="トレードルール・戦略メモ…" oninput="savePD()"></textarea>
+    </div>
     <div class="np-r"><input id="np" placeholder="プロジェクト名" maxlength="24"><button onclick="addProj()">追加</button></div>
     <button class="mcl" onclick="closeM('m-proj')">閉じる</button>
   </div>
@@ -531,10 +536,11 @@ function renderProjM(){
   document.getElementById('ep').innerHTML=EMOJIS.map(e=>`<span class="ep-i${e===selEmoji?' on':''}" onclick="selEmoji='${e}';renderProjM()">${e}</span>`).join('');
   const p=gProjs();
   document.getElementById('pl').innerHTML=p.map(x=>`<div class="pi" onclick="selEditP('${x.id}')"><span>${x.emoji||'📈'}</span><span class="pi-n">${x.name}</span><span class="pi-c">${gTrades(x.id).length}件</span>${x.id!=='default'?`<button class="pi-d" onclick="event.stopPropagation();delProj('${x.id}')">✕</button>`:''}</div>`).join('');
-  if(editPid){const ep=p.find(x=>x.id===editPid);if(ep){document.getElementById('pd').style.display='block';document.getElementById('pd-t').textContent=ep.name+' のメモ';document.getElementById('pd-desc').value=ep.desc||''}}
+  if(editPid){const ep=p.find(x=>x.id===editPid);if(ep){document.getElementById('pd').style.display='block';document.getElementById('pd-name').value=ep.name;document.getElementById('pd-desc').value=ep.desc||''}}
 }
 function selEditP(id){editPid=id;renderProjM()}
 function savePD(){const p=gProjs();const proj=p.find(x=>x.id===editPid);if(proj){proj.desc=document.getElementById('pd-desc').value;sProjs(p)}}
+function saveProjName(){const p=gProjs();const proj=p.find(x=>x.id===editPid);if(proj){proj.name=document.getElementById('pd-name').value||proj.name;sProjs(p);renderProjSel()}}
 function addProj(){const name=document.getElementById('np').value.trim();if(!name)return;const p=gProjs();p.push({id:'p_'+Date.now(),name,emoji:selEmoji,desc:''});sProjs(p);document.getElementById('np').value='';renderProjM();renderProjSel()}
 function delProj(id){if(!confirm('削除しますか？'))return;let p=gProjs().filter(x=>x.id!==id);localStorage.removeItem('tj_t_'+id);sProjs(p);if(curPid===id){curPid='default';trades=gTrades('default')}renderProjSel();renderProjM();render()}
 
@@ -567,11 +573,11 @@ function exportData(){
 }
 function importData(e){
   const file=e.target.files[0];if(!file)return;
+  if(!confirm('バックアップファイルを読み込んで、現在のデータを上書きしますか？\n（この操作は取り消せません）')){e.target.value='';return}
   const reader=new FileReader();
   reader.onload=function(ev){
     try{
       const data=JSON.parse(ev.target.result);
-      if(!confirm('現在のデータを上書きして復元しますか？\n（この操作は取り消せません）')){e.target.value='';return}
       const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('tj_'))keys.push(k)}
       keys.forEach(k=>localStorage.removeItem(k));
       Object.entries(data).forEach(([k,v])=>localStorage.setItem(k,v));

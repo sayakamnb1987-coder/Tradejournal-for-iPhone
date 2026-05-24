@@ -219,6 +219,27 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
   .detail-imgs, .img-preview-grid { grid-template-columns: 1fr 1fr; }
   .theme-grid { grid-template-columns: repeat(3, 1fr); }
 }
+/* Project bar */
+.proj-bar { display:flex; align-items:center; gap:10px; margin-bottom:16px; padding:10px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); }
+.proj-sel { flex:0 0 auto; max-width:220px; background:var(--bg3); border:1px solid var(--border); color:var(--text); font-size:13px; padding:6px 10px; border-radius:6px; outline:none; cursor:pointer; }
+.proj-rules { flex:1; font-size:12px; color:var(--text3); line-height:1.5; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.proj-manage-btn { padding:6px 13px; background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:6px; cursor:pointer; font-size:12px; white-space:nowrap; transition:all 0.15s; }
+.proj-manage-btn:hover { border-color:var(--accent); color:var(--accent); }
+/* Project modal items */
+.proj-item { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:11px 13px; margin-bottom:8px; }
+.proj-item.active { border-color:var(--accent); }
+.proj-item-hdr { display:flex; align-items:center; gap:8px; }
+.proj-item-name { flex:1; font-size:13px; font-weight:600; }
+.proj-item-cnt { font-size:11px; color:var(--text3); font-family:var(--mono); }
+.proj-item-editbtn { padding:3px 10px; border:1px solid var(--border); border-radius:4px; background:transparent; color:var(--text2); font-size:11px; cursor:pointer; transition:all 0.15s; }
+.proj-item-editbtn:hover { border-color:var(--accent); color:var(--accent); }
+.proj-item-del { padding:3px 8px; border:none; background:transparent; color:var(--text3); font-size:14px; cursor:pointer; transition:color 0.15s; }
+.proj-item-del:hover { color:var(--red); }
+.proj-edit-area { margin-top:10px; display:none; }
+.proj-edit-area.open { display:block; }
+.proj-edit-area input, .proj-edit-area textarea { width:100%; background:var(--bg2); border:1px solid var(--border); border-radius:5px; color:var(--text); font-size:13px; padding:7px 10px; outline:none; font-family:var(--sans); margin-bottom:7px; transition:border-color 0.15s; }
+.proj-edit-area textarea { resize:vertical; min-height:70px; line-height:1.6; }
+.proj-edit-area input:focus, .proj-edit-area textarea:focus { border-color:var(--accent); }
 </style>
 </head>
 <body>
@@ -227,6 +248,22 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- Project modal -->
+<div class="modal-backdrop" id="proj-modal">
+  <div class="modal" onclick="event.stopPropagation()" style="width:520px">
+    <h2>📁 プロジェクト管理</h2>
+    <div id="d-proj-list"></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+      <div class="modal-section-label">新しいプロジェクトを追加</div>
+      <div style="display:flex;gap:8px">
+        <input id="d-new-proj" placeholder="プロジェクト名（例: USD/JPY 短期戦略）" style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:5px;color:var(--text);padding:7px 10px;font-size:13px;outline:none;font-family:var(--sans);transition:border-color 0.15s" onkeydown="if(event.key==='Enter')addProj()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="addProj()" style="padding:7px 15px;background:var(--accent);border:none;border-radius:5px;color:var(--accent-text);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">＋ 追加</button>
+      </div>
+    </div>
+    <button class="modal-close-btn" style="margin-top:16px" onclick="closeProjModal()">閉じる</button>
+  </div>
 </div>
 
 <!-- Settings modal -->
@@ -284,6 +321,12 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
     <button class="settings-btn" onclick="openSettings()">⚙️ 設定</button>
   </div>
 
+  <div class="proj-bar">
+    <select id="psel" class="proj-sel" onchange="switchProj(this.value)"></select>
+    <div id="proj-rules-preview" class="proj-rules"></div>
+    <button class="proj-manage-btn" onclick="openProjModal()">📁 プロジェクト管理</button>
+  </div>
+
   <div class="stats">
     <div class="stat"><div class="stat-label">総トレード</div><div class="stat-val" id="s-total">0</div></div>
     <div class="stat"><div class="stat-label">勝率</div><div class="stat-val" id="s-winrate">—</div></div>
@@ -316,7 +359,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
   <!-- AI advice panel -->
   <div class="ai-panel">
     <div class="ai-panel-hdr">
-      <span class="ai-panel-title">🤖 AIアドバイス（Claude）</span>
+      <span class="ai-panel-title">🤖 AIアドバイス（Gemini）</span>
       <button class="ai-btn" id="ai-btn" onclick="runAI()">分析する</button>
     </div>
     <div class="ai-output" id="ai-output">Google AI APIキーを設定して「分析する」を押してください。</div>
@@ -472,8 +515,8 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
 </div>
 
 <script>
-const STORAGE_KEY = 'trade_journal_v2';
 const THEME_KEY = 'trade_journal_theme';
+let curPid = 'default';
 let trades = [];
 let selectedDir = '', selectedRes = '';
 let pendingImgs = [], pendingImgCaps = [];
@@ -481,6 +524,69 @@ let currentEditId = null;
 let fibEntry = null, fibExit = null;
 let htfVals = { htf4h: null, htfD1: null, htfW1: null };
 let sortKey = 'date_desc';
+
+function gProjs(){try{return JSON.parse(localStorage.getItem('tj_projs')||'null')||[{id:'default',name:'メインルール',desc:''}]}catch{return [{id:'default',name:'メインルール',desc:''}]}}
+function sProjs(p){localStorage.setItem('tj_projs',JSON.stringify(p))}
+function gTrades(id){
+  try{
+    if(id==='default'&&!localStorage.getItem('tj_t_default')&&localStorage.getItem('trade_journal_v2')){
+      localStorage.setItem('tj_t_default',localStorage.getItem('trade_journal_v2'));
+    }
+    return JSON.parse(localStorage.getItem('tj_t_'+id)||'[]');
+  }catch{return []}
+}
+function sTrades(id,t){localStorage.setItem('tj_t_'+id,JSON.stringify(t))}
+
+function renderProjSel(){
+  const p=gProjs();
+  document.getElementById('psel').innerHTML=p.map(x=>`<option value="${x.id}"${x.id===curPid?' selected':''}>${x.name}</option>`).join('');
+  const proj=p.find(x=>x.id===curPid);
+  const el=document.getElementById('proj-rules-preview');
+  if(el)el.textContent=proj&&proj.desc?'📋 '+proj.desc:'';
+}
+function switchProj(id){curPid=id;localStorage.setItem('tj_curproj',id);trades=gTrades(id);renderProjSel();render();}
+function openProjModal(){renderDProjList();document.getElementById('proj-modal').classList.add('open');}
+function closeProjModal(){document.getElementById('proj-modal').classList.remove('open');}
+function renderDProjList(){
+  const p=gProjs();
+  document.getElementById('d-proj-list').innerHTML=p.map(x=>`
+    <div class="proj-item${x.id===curPid?' active':''}" id="dpi-${x.id}">
+      <div class="proj-item-hdr">
+        <span class="proj-item-name">${x.name}</span>
+        <span class="proj-item-cnt">${gTrades(x.id).length}件</span>
+        <button class="proj-item-editbtn" onclick="toggleDProjEdit('${x.id}')">編集</button>
+        ${x.id!=='default'?`<button class="proj-item-del" onclick="delProj('${x.id}')">✕</button>`:''}
+      </div>
+      <div class="proj-edit-area" id="dpe-${x.id}">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px">プロジェクト名</div>
+        <input placeholder="プロジェクト名" value="${x.name.replace(/"/g,'&quot;')}" id="dpn-${x.id}" oninput="saveDProjName('${x.id}')">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px">ルール・メモ</div>
+        <textarea placeholder="トレードルール・戦略メモ…" id="dpd-${x.id}" oninput="saveDProjDesc('${x.id}')">${x.desc||''}</textarea>
+      </div>
+    </div>`).join('');
+}
+function toggleDProjEdit(id){document.getElementById('dpe-'+id).classList.toggle('open');}
+function saveDProjName(id){
+  const p=gProjs();const proj=p.find(x=>x.id===id);
+  if(proj){proj.name=document.getElementById('dpn-'+id).value||proj.name;sProjs(p);renderProjSel();}
+}
+function saveDProjDesc(id){
+  const p=gProjs();const proj=p.find(x=>x.id===id);
+  if(proj){proj.desc=document.getElementById('dpd-'+id).value;sProjs(p);renderProjSel();}
+}
+function addProj(){
+  const inp=document.getElementById('d-new-proj');
+  const name=inp.value.trim();if(!name)return;
+  const p=gProjs();p.push({id:'p_'+Date.now(),name,desc:''});
+  sProjs(p);inp.value='';renderDProjList();renderProjSel();
+}
+function delProj(id){
+  if(!confirm('削除しますか？このプロジェクトのトレードも全て削除されます。'))return;
+  let p=gProjs().filter(x=>x.id!==id);
+  localStorage.removeItem('tj_t_'+id);sProjs(p);
+  if(curPid===id){curPid='default';trades=gTrades('default');}
+  renderDProjList();renderProjSel();render();
+}
 function sortedTrades() { const a = [...trades]; const o = {WIN:0,BE:1,LOSS:2}; if(sortKey==='date_asc') return a.sort((x,y)=>(x.date||'').localeCompare(y.date||'')); if(sortKey==='pnl_desc') return a.sort((x,y)=>(y.pnl||0)-(x.pnl||0)); if(sortKey==='pnl_asc') return a.sort((x,y)=>(x.pnl||0)-(y.pnl||0)); if(sortKey==='result') return a.sort((x,y)=>(o[x.result]??3)-(o[y.result]??3)); return a.sort((x,y)=>(y.date||'').localeCompare(x.date||'')); }
 let htfTFs = { htf4h: '4H', htfD1: '日足', htfW1: '週足' };
 function gHTFTFs() { try { return JSON.parse(localStorage.getItem('tj_htf_tfs')) || { htf4h:'4H', htfD1:'日足', htfW1:'週足' }; } catch { return { htf4h:'4H', htfD1:'日足', htfW1:'週足' }; } }
@@ -563,6 +669,7 @@ async function callAI(prompt, outputId) {
 }
 
 function buildAIPrompt() {
+  const proj = gProjs().find(x => x.id === curPid) || {name:'—',desc:''};
   const tot = trades.length;
   const wins = trades.filter(t => t.result === 'WIN').length;
   const wr = tot > 0 ? Math.round(wins / tot * 100) : 0;
@@ -571,7 +678,7 @@ function buildAIPrompt() {
   const avgRR = rrs.length ? Math.round(rrs.reduce((a,b) => a+b, 0) / rrs.length * 10) / 10 : '—';
   const fibSt = (() => { const s = {}; trades.forEach(t => { if (!t.fibEntry) return; if (!s[t.fibEntry]) s[t.fibEntry] = {n:0,w:0}; s[t.fibEntry].n++; if (t.result==='WIN') s[t.fibEntry].w++; }); return Object.entries(s).map(([k,v]) => `${k}:${v.n}回 勝率${Math.round(v.w/v.n*100)}%`).join(', ') || 'なし'; })();
   const recent = trades.slice(0, 5).map(t => `${t.date||''} ${t.symbol||''} ${t.dir} ${t.result} ${t.pnl!=null?(t.pnl>=0?'+':'')+t.pnl+'円':''}`).join(' | ');
-  return `あなたはFXトレードの専門コーチです。データを分析して具体的アドバイスを日本語で。\n統計: ${tot}回 勝率${wr}% 損益¥${pnl} avgRR:${avgRR}\nFib: ${fibSt}\n最近: ${recent}\n\n1.強み 2.最優先改善点 3.来週のアクション3つ を350字程度で。`;
+  return `あなたはFXトレードの専門コーチです。データを分析して具体的アドバイスを日本語で。\nプロジェクト:${proj.name} ルール:${proj.desc||'なし'}\n統計: ${tot}回 勝率${wr}% 損益¥${pnl} avgRR:${avgRR}\nFib: ${fibSt}\n最近: ${recent}\n\n1.強み 2.最優先改善点 3.来週のアクション3つ を350字程度で。`;
 }
 
 // ── THEMES ──────────────────────────────────────────────
@@ -657,11 +764,11 @@ function exportData() {
 }
 function importData(e) {
   const file = e.target.files[0]; if (!file) return;
+  if (!confirm('バックアップファイルを読み込んで、現在のデータを上書きしますか？\n（この操作は取り消せません）')) { e.target.value = ''; return; }
   const reader = new FileReader();
   reader.onload = function(ev) {
     try {
       const data = JSON.parse(ev.target.result);
-      if (!confirm('現在のデータを上書きして復元しますか？\n（この操作は取り消せません）')) { e.target.value = ''; return; }
       const keys = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('tj_')) keys.push(k); }
       keys.forEach(k => localStorage.removeItem(k));
       Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
@@ -672,6 +779,7 @@ function importData(e) {
   reader.readAsText(file);
 }
 document.getElementById('settings-modal').addEventListener('click', function(e) { if (e.target === this) closeSettings(); });
+document.getElementById('proj-modal').addEventListener('click', function(e) { if (e.target === this) closeProjModal(); });
 
 // ── IMAGES ──────────────────────────────────────────────
 async function compressFile(file) {
@@ -747,8 +855,8 @@ function openLightbox(src) { document.getElementById('lightbox-img').src = src; 
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 
 // ── DATA ────────────────────────────────────────────────
-function load() { try { trades = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { trades = []; } }
-function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(trades)); }
+function load() { trades = gTrades(curPid); }
+function persist() { sTrades(curPid, trades); }
 
 // ── FORM CONTROLS ────────────────────────────────────────
 function setDir(d) {
@@ -1050,8 +1158,10 @@ function render() {
 }
 
 // ── INIT ─────────────────────────────────────────────────
+curPid = localStorage.getItem('tj_curproj') || 'default';
 load();
 loadThemePref();
+renderProjSel();
 htfTFs = gHTFTFs(); ['htf4h','htfD1','htfW1'].forEach((k,i) => { const s = document.getElementById(['htf-sel-4h','htf-sel-d1','htf-sel-w1'][i]); if(s) s.value = htfTFs[k]; });
 renderSymSel();
 render();
