@@ -93,6 +93,10 @@ input,select,textarea,button{font-family:inherit}
 .mbk{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:flex-end}.mbk.on{display:flex}
 .ms{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(18px + var(--safe));max-height:85vh;overflow-y:auto}
 .ms h2{font-size:16px;font-weight:700;margin-bottom:15px}
+.th-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:4px}
+.th-btn{padding:9px 4px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:11px;cursor:pointer;text-align:center;-webkit-appearance:none}
+.clr-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}.clr-row:last-child{border-bottom:none}
+.clr-row label{font-size:13px;color:var(--text2)}.clr-row input[type=color]{width:38px;height:28px;border:none;background:none;cursor:pointer;border-radius:6px;padding:0}
 .pi{display:flex;align-items:center;gap:9px;background:var(--bg3);border-radius:10px;padding:11px;margin-bottom:7px;cursor:pointer}
 .pi-n{flex:1;font-size:14px;font-weight:500}.pi-c{font-size:12px;color:var(--text3)}.pi-d{background:transparent;border:none;color:var(--text3);font-size:15px;padding:3px 7px;cursor:pointer}
 .pd-ta{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;padding:10px 12px;outline:none;resize:none;min-height:80px;line-height:1.6;margin-top:7px}.pd-ta:focus{border-color:var(--accent)}
@@ -133,8 +137,21 @@ input,select,textarea,button{font-family:inherit}
     <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">負けた原因リスト</div>
     <div class="sym-list" id="cause-list"></div>
     <div class="np-r"><input id="new-cause" placeholder="カスタム原因を追加" maxlength="20"><button onclick="addCause()">追加</button></div>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">🎨 テーマプリセット</div>
+    <div class="th-grid" id="th-grid"></div>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">🖌 カスタムカラー</div>
+    <div>
+      <div class="clr-row"><label>アクセントカラー</label><input type="color" oninput="sv('--accent',this.value)" id="clr-accent"></div>
+      <div class="clr-row"><label>背景色</label><input type="color" oninput="sv('--bg',this.value);sv('--bg2',this.value)" id="clr-bg"></div>
+      <div class="clr-row"><label>文字色</label><input type="color" oninput="sv('--text',this.value)" id="clr-text"></div>
+    </div>
     <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">🤖 AIアドバイス用 APIキー（任意）</div>
     <div class="np-r"><input id="api-key-input" placeholder="sk-ant-..." style="font-size:13px" oninput="localStorage.setItem('tj_apikey',this.value)"></div>
+    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin:14px 0 8px">📦 データバックアップ</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button style="flex:1;padding:11px 6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:10px;font-size:13px;cursor:pointer;-webkit-appearance:none" onclick="exportData()">⬇️ エクスポート</button>
+      <label style="flex:1;padding:11px 6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:10px;font-size:13px;cursor:pointer;text-align:center;display:block">⬆️ インポート<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
+    </div>
     <button class="mcl" onclick="closeM('m-set')">閉じる</button>
   </div>
 </div>
@@ -158,6 +175,16 @@ input,select,textarea,button{font-family:inherit}
   <div class="facc"><div class="facc-h" onclick="toggleFacc('fib')"><span class="facc-t">📐 フィボナッチ分析</span><span class="facc-c" id="fc-fib">▼</span></div><div class="facc-b" id="fb-fib"></div></div>
   <div class="facc"><div class="facc-h" onclick="toggleFacc('lc')"><span class="facc-t">❌ 負けた原因ランキング</span><span class="facc-c" id="fc-lc">▼</span></div><div class="facc-b" id="fb-lc"></div></div>
   <div class="facc"><div class="facc-h" onclick="toggleFacc('htf')"><span class="facc-t">📡 上位足方向 集計</span><span class="facc-c" id="fc-htf">▼</span></div><div class="facc-b" id="fb-htf"></div></div>
+  <div style="padding:4px 15px 8px;display:flex;align-items:center;gap:8px">
+    <span style="font-size:11px;color:var(--text3);flex-shrink:0">並び替え</span>
+    <select id="sort-sel" onchange="sortKey=this.value;render()" style="flex:1;background:var(--bg2);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:5px 8px;border-radius:8px;outline:none;-webkit-appearance:none">
+      <option value="date_desc">📅 新しい順</option>
+      <option value="date_asc">📅 古い順</option>
+      <option value="pnl_desc">💰 損益 大きい順</option>
+      <option value="pnl_asc">💰 損益 小さい順</option>
+      <option value="result">🏁 結果別（WIN→BE→LOSS）</option>
+    </select>
+  </div>
   <div class="tlist" id="tlist"></div>
 </div>
 
@@ -327,6 +354,8 @@ function buildAIPrompt(trades,proj){
 
 // ── iPhone state ──
 let trades=[],dir='',res='',sfE='',sfX='',selEmoji='📈',editPid=null,editTradeId=null,curPid='default';
+let sortKey='date_desc';
+function sortedTrades(){const a=[...trades];const o={WIN:0,BE:1,LOSS:2};if(sortKey==='date_asc')return a.sort((x,y)=>(x.date||'').localeCompare(y.date||''));if(sortKey==='pnl_desc')return a.sort((x,y)=>(y.pnl||0)-(x.pnl||0));if(sortKey==='pnl_asc')return a.sort((x,y)=>(x.pnl||0)-(y.pnl||0));if(sortKey==='result')return a.sort((x,y)=>(o[x.result]??3)-(o[y.result]??3));return a.sort((x,y)=>(y.date||'').localeCompare(x.date||''));}
 let htfVals={htf4h:null,htfD1:null,htfW1:null};
 let htfTFs={htf4h:'4H',htfD1:'日足',htfW1:'週足'};
 function gHTFTFs(){try{return JSON.parse(localStorage.getItem('tj_htf_tfs'))||{htf4h:'4H',htfD1:'日足',htfW1:'週足'}}catch{return{htf4h:'4H',htfD1:'日足',htfW1:'週足'}}}
@@ -400,9 +429,15 @@ function renderPrev(){
 }
 
 // ── Settings ──
+function renderThemeGrid(){
+  document.getElementById('th-grid').innerHTML=THEMES.map(t=>`<button class="th-btn" style="background:${t.bg};color:${t.t};border-color:${t.b}" onclick="applyTheme(${JSON.stringify(t)});saveTheme();renderThemeGrid()">${t.n}</button>`).join('');
+}
 function initSettingsI(){
   document.getElementById('api-key-input').value=gApiKey();
-  renderSymList();renderCauseList();
+  renderSymList();renderCauseList();renderThemeGrid();
+  document.getElementById('clr-accent').value=gv('--accent').trim()||'#3ecf8e';
+  document.getElementById('clr-bg').value=gv('--bg').trim()||'#0e0f11';
+  document.getElementById('clr-text').value=gv('--text').trim()||'#e8eaf0';
 }
 function renderSymSel(){const s=gSyms();document.getElementById('ff-sym').innerHTML='<option value="">選択</option>'+s.map(x=>`<option>${x}</option>`).join('')+'<option value="__c">カスタム…</option>'}
 function renderSymList(){const s=gSyms();document.getElementById('sym-list').innerHTML=s.map(x=>`<div class="sym-tag">${x}<button onclick="delSym('${x}')">✕</button></div>`).join('');renderSymSel()}
@@ -518,13 +553,38 @@ function renderLC(){const cnt={};trades.filter(t=>t.result==='LOSS'&&t.lossCause
 function toggleFacc(k){document.getElementById('fb-'+k).classList.toggle('on');document.getElementById('fc-'+k).classList.toggle('on')}
 function openM(id){document.getElementById(id).classList.add('on')}
 function closeM(id){document.getElementById(id).classList.remove('on')}
+function exportData(){
+  const data={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('tj_'))data[k]=localStorage.getItem(k)}
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download='trade_backup_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();URL.revokeObjectURL(url);
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!confirm('現在のデータを上書きして復元しますか？\n（この操作は取り消せません）')){e.target.value='';return}
+      const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('tj_'))keys.push(k)}
+      keys.forEach(k=>localStorage.removeItem(k));
+      Object.entries(data).forEach(([k,v])=>localStorage.setItem(k,v));
+      location.reload();
+    }catch(err){alert('読み込みエラー: '+err.message)}
+    e.target.value='';
+  };
+  reader.readAsText(file);
+}
 
 // ── Render ──
 function render(){
   renderStats();renderFib();renderLC();renderHTFStats();renderProjSel();
   const list=document.getElementById('tlist');
   if(!trades.length){list.innerHTML='<div class="empty">// まだトレードがありません<br>「＋ 新規」から追加してください</div>';return}
-  list.innerHTML=trades.map(t=>{
+  list.innerHTML=sortedTrades().map(t=>{
     const pnl=t.pnl,pc=pnl>0?'pos':pnl<0?'neg':'ze',ps=pnl!=null?(pnl>=0?'+':'')+'¥'+pnl.toLocaleString():'—';
     const imgSlots=(t.imgs||[]).map((_,i)=>`<div class="td-img" id="isl_${t.id}_${i}"></div>`).join('');
     return`<div class="tc">

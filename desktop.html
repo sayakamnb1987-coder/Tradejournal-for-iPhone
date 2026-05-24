@@ -262,6 +262,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
       <div class="color-row"><label>📦 背景（カード）</label><input type="color" id="c-bg2" oninput="applyCustomColor('bg2', this.value)"></div>
       <div class="color-row"><label>✏️ テキスト</label><input type="color" id="c-text" oninput="applyCustomColor('text', this.value)"></div>
     </div>
+    <div class="modal-section">
+      <div class="modal-section-label">📦 データバックアップ</div>
+      <div style="display:flex;gap:8px">
+        <button class="settings-btn" style="flex:1;justify-content:center" onclick="exportData()">⬇️ エクスポート</button>
+        <label class="settings-btn" style="flex:1;justify-content:center;cursor:pointer">⬆️ インポート<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
+      </div>
+    </div>
     <button class="modal-close-btn" onclick="closeSettings()">閉じる</button>
   </div>
 </div>
@@ -318,7 +325,19 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
     <button class="tab-btn" onclick="newTrade()">＋ 新規登録</button>
   </div>
 
-  <div id="tab-list"><div id="trade-list"></div></div>
+  <div id="tab-list">
+    <div style="display:flex;align-items:center;gap:8px;padding:10px 0 6px">
+      <span style="font-size:11px;color:var(--text3)">並び替え</span>
+      <select id="sort-sel" onchange="sortKey=this.value;render()" style="background:var(--bg2);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:5px 10px;border-radius:7px;outline:none;cursor:pointer">
+        <option value="date_desc">📅 新しい順</option>
+        <option value="date_asc">📅 古い順</option>
+        <option value="pnl_desc">💰 損益 大きい順</option>
+        <option value="pnl_asc">💰 損益 小さい順</option>
+        <option value="result">🏁 結果別（WIN→BE→LOSS）</option>
+      </select>
+    </div>
+    <div id="trade-list"></div>
+  </div>
 
   <div id="tab-form" style="display:none">
     <div class="form-card">
@@ -459,6 +478,8 @@ let pendingImgs = [], pendingImgCaps = [];
 let currentEditId = null;
 let fibEntry = null, fibExit = null;
 let htfVals = { htf4h: null, htfD1: null, htfW1: null };
+let sortKey = 'date_desc';
+function sortedTrades() { const a = [...trades]; const o = {WIN:0,BE:1,LOSS:2}; if(sortKey==='date_asc') return a.sort((x,y)=>(x.date||'').localeCompare(y.date||'')); if(sortKey==='pnl_desc') return a.sort((x,y)=>(y.pnl||0)-(x.pnl||0)); if(sortKey==='pnl_asc') return a.sort((x,y)=>(x.pnl||0)-(y.pnl||0)); if(sortKey==='result') return a.sort((x,y)=>(o[x.result]??3)-(o[y.result]??3)); return a.sort((x,y)=>(y.date||'').localeCompare(x.date||'')); }
 let htfTFs = { htf4h: '4H', htfD1: '日足', htfW1: '週足' };
 function gHTFTFs() { try { return JSON.parse(localStorage.getItem('tj_htf_tfs')) || { htf4h:'4H', htfD1:'日足', htfW1:'週足' }; } catch { return { htf4h:'4H', htfD1:'日足', htfW1:'週足' }; } }
 function setHTFTF(key, val) { htfTFs[key] = val; localStorage.setItem('tj_htf_tfs', JSON.stringify(htfTFs)); }
@@ -623,6 +644,31 @@ function openSettings() {
   document.getElementById('settings-modal').classList.add('open');
 }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
+function exportData() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('tj_')) data[k] = localStorage.getItem(k); }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url;
+  a.download = 'trade_backup_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!confirm('現在のデータを上書きして復元しますか？\n（この操作は取り消せません）')) { e.target.value = ''; return; }
+      const keys = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('tj_')) keys.push(k); }
+      keys.forEach(k => localStorage.removeItem(k));
+      Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
+      location.reload();
+    } catch(err) { alert('読み込みエラー: ' + err.message); }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
 document.getElementById('settings-modal').addEventListener('click', function(e) { if (e.target === this) closeSettings(); });
 
 // ── IMAGES ──────────────────────────────────────────────
@@ -946,7 +992,7 @@ function render() {
     return;
   }
   const htfLabels = { UP: '↑', FLAT: '→', DOWN: '↓' };
-  list.innerHTML = trades.map(t => {
+  list.innerHTML = sortedTrades().map(t => {
     const rr = calcRR(t);
     const pnlClass = t.pnl > 0 ? 'pos' : t.pnl < 0 ? 'neg' : 'ze';
     const pnlStr = t.pnl !== null ? (t.pnl >= 0 ? '+' : '')+'¥'+t.pnl.toLocaleString() : '—';
